@@ -1,12 +1,9 @@
-public class X23510722 extends Polynomial {
-   public static void main(String args[]) throws Exception {
-      Polynomial p = new X23510722(" X^5"), 
-            q = new X23510722("X^2 - X + 1");
-      Utility.run(p, q);
-   }
-   
-   public X23510722(String s) {
-       super();
+public class Polynomial {
+    
+    DList<Term> data = null;
+    
+    public Polynomial(String s) {
+       data = new DList<>();
        s = s.trim();//clean up white space on ends
        s = s.replaceAll("- ", "-");//move any minus operators directly next to term to use as negative sign       
        s = s.replaceAll("\\+", "");//get rid of + operators to cleanly split by spaces
@@ -29,16 +26,16 @@ public class X23510722 extends Polynomial {
                else termHolder.setDegree(1);
            }
            else termHolder.setDegree(0);
-           this.data.addLast(termHolder);
+           data.addLast(termHolder);
        }
    }
-
-   public X23510722() {
-      super();
+    
+    public Polynomial() {
+       data = new DList<>();
    }
-
-   public Polynomial add(Polynomial p) {
-      Polynomial ans = new X23510722();
+    
+    public Polynomial add(Polynomial p) {
+      Polynomial ans = new Polynomial();
       DNode<Term> left = null;
       DNode<Term> right = null;
     try {
@@ -84,8 +81,8 @@ public class X23510722 extends Polynomial {
       return ans;
    }
 
-public Polynomial subtract(Polynomial p){
-      Polynomial ans = new X23510722();
+   public Polynomial subtract(Polynomial p){
+      Polynomial ans = new Polynomial();
       DNode<Term> right = null;
     try {
         right = p.data.getFirst();
@@ -103,7 +100,7 @@ public Polynomial subtract(Polynomial p){
    }
 
    public Polynomial multiply(Polynomial p){
-      Polynomial ans = new X23510722("0");
+      Polynomial ans = new Polynomial("0");
       DNode<Term> left = null;
     try {
         left = this.data.getFirst();
@@ -112,7 +109,7 @@ public Polynomial subtract(Polynomial p){
     }
       DNode<Term> right = null;
       while(left.getNext() != null){
-          Polynomial answerHolder = new X23510722();
+          Polynomial answerHolder = new Polynomial();
           try {
             right = p.data.getFirst();
         } catch (Exception e) {
@@ -130,14 +127,32 @@ public Polynomial subtract(Polynomial p){
    }
 
    public Polynomial divide(Polynomial p) throws Exception {
-      Polynomial ans = new X23510722();
+      Polynomial ans = new Polynomial();
       
       return ans;
    }
 
    public Polynomial remainder(Polynomial p) throws Exception {
-      Polynomial ans = new X23510722();
+      Polynomial ans = new Polynomial();
       // complete this code
       return ans;
    }
+   
+   public final String toString() {
+       String ans = "";
+       boolean starting = true;
+       try {
+          DNode<Term> n = data.getFirst();
+          while (n != null) {
+             if (!starting && n.getData().isPositive()) ans += " +";
+             starting = false;
+             ans += " " + n.getData().toString();
+             n = data.getNext(n);
+          }
+       } catch (Exception e) {
+          if (starting) return "0";
+       }
+       return ans;
+    }
+   
 }
